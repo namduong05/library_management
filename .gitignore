@@ -1,0 +1,11 @@
+bin/
+obj/
+**/bin/
+**/obj/
+.vs/
+*.user
+*.suo
+*.swp
+.DS_Store
+Thumbs.db
+
