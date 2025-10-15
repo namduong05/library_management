@@ -1,0 +1,64 @@
+@model LibraryManagement.Web.Models.ApplicationUser
+@{
+    ViewData["Title"] = "User Details";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="section-title mb-0"><i class="fa-solid fa-user"></i> @Model.FullName</h1>
+    <div class="btn-group">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary"><i class="fa-solid fa-pen me-2"></i>Edit</a>
+        <a asp-action="Index" class="btn btn-outline-secondary"><i class="fa-solid fa-arrow-left me-2"></i>Back to List</a>
+    </div>
+</div>
+
+<div class="border rounded-4 p-4 mb-4">
+    <dl class="row mb-0">
+        <dt class="col-sm-3">Email</dt>
+        <dd class="col-sm-9">@Model.Email</dd>
+        <dt class="col-sm-3">Phone</dt>
+        <dd class="col-sm-9">@Model.PhoneNumber</dd>
+        <dt class="col-sm-3">Role</dt>
+        <dd class="col-sm-9"><span class="badge bg-@(Model.Role == UserRole.Librarian ? "primary" : "success")">@Model.Role</span></dd>
+        <dt class="col-sm-3">Address</dt>
+        <dd class="col-sm-9">@Model.Address</dd>
+        <dt class="col-sm-3">Registered</dt>
+        <dd class="col-sm-9">@Model.RegisteredAt.ToShortDateString()</dd>
+    </dl>
+</div>
+
+<div class="border rounded-4 p-4">
+    <h2 class="h5 mb-3">Loan History</h2>
+    @if (!Model.Loans.Any())
+    {
+        <p class="text-muted mb-0">No loans recorded for this user.</p>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Book</th>
+                        <th>Borrowed</th>
+                        <th>Due</th>
+                        <th>Returned</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var loan in Model.Loans.OrderByDescending(l => l.BorrowedAt))
+                    {
+                        <tr>
+                            <td>@loan.Book?.Title</td>
+                            <td>@loan.BorrowedAt.ToShortDateString()</td>
+                            <td>@loan.DueAt.ToShortDateString()</td>
+                            <td>@loan.ReturnedAt?.ToShortDateString()</td>
+                            <td><span class="badge badge-status @(loan.Status == LoanStatus.Returned ? "bg-success" : "bg-primary")">@loan.Status</span></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+

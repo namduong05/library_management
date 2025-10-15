@@ -1,0 +1,57 @@
+@model LibraryManagement.Web.Models.Loan
+@{
+    ViewData["Title"] = "Loan Details";
+    var badgeClass = Model.Status switch
+    {
+        LoanStatus.Borrowed => "bg-primary",
+        LoanStatus.Returned => "bg-success",
+        LoanStatus.Overdue => "bg-danger",
+        _ => "bg-secondary"
+    };
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="section-title mb-0"><i class="fa-solid fa-file-invoice"></i> Loan #@Model.Id</h1>
+    <a asp-action="Index" class="btn btn-outline-secondary"><i class="fa-solid fa-arrow-left me-2"></i>Back to List</a>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="border rounded-4 p-4 h-100">
+            <h2 class="h5 mb-3"><i class="fa-solid fa-book me-2 text-primary"></i>Book Information</h2>
+            <p class="fw-semibold mb-1">@Model.Book?.Title</p>
+            <p class="text-muted">@Model.Book?.Author</p>
+            <p class="mb-0"><small class="text-muted">ISBN: @Model.Book?.Isbn</small></p>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="border rounded-4 p-4 h-100">
+            <h2 class="h5 mb-3"><i class="fa-solid fa-user me-2 text-primary"></i>Reader</h2>
+            <p class="fw-semibold mb-1">@Model.ApplicationUser?.FullName</p>
+            <p class="text-muted">@Model.ApplicationUser?.Email</p>
+            <p class="mb-0"><small class="text-muted">@Model.ApplicationUser?.PhoneNumber</small></p>
+        </div>
+    </div>
+</div>
+
+<div class="border rounded-4 p-4 mt-4">
+    <div class="row">
+        <div class="col-md-3">
+            <h6 class="text-uppercase text-muted">Borrowed</h6>
+            <p class="fw-semibold">@Model.BorrowedAt.ToShortDateString()</p>
+        </div>
+        <div class="col-md-3">
+            <h6 class="text-uppercase text-muted">Due</h6>
+            <p class="fw-semibold">@Model.DueAt.ToShortDateString()</p>
+        </div>
+        <div class="col-md-3">
+            <h6 class="text-uppercase text-muted">Returned</h6>
+            <p class="fw-semibold">@Model.ReturnedAt?.ToShortDateString()</p>
+        </div>
+        <div class="col-md-3">
+            <h6 class="text-uppercase text-muted">Status</h6>
+            <p><span class="badge badge-status @badgeClass">@Model.Status</span></p>
+        </div>
+    </div>
+</div>
+

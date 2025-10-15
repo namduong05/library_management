@@ -1,0 +1,32 @@
+@model LibraryManagement.Web.Models.Loan
+@{
+    var bookOptions = ViewBag.Books as List<SelectListItem> ?? new();
+    var readerOptions = ViewBag.Readers as List<SelectListItem> ?? new();
+}
+<div class="row g-3">
+    <div class="col-md-6">
+        <label asp-for="BookId" class="form-label">Book</label>
+        <select asp-for="BookId" asp-items="bookOptions" class="form-select form-select-lg">
+            <option value="">Select a book</option>
+        </select>
+        <span asp-validation-for="BookId" class="text-danger"></span>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="ApplicationUserId" class="form-label">Reader</label>
+        <select asp-for="ApplicationUserId" asp-items="readerOptions" class="form-select form-select-lg">
+            <option value="">Select a reader</option>
+        </select>
+        <span asp-validation-for="ApplicationUserId" class="text-danger"></span>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="BorrowedAt" class="form-label"></label>
+        <input asp-for="BorrowedAt" type="date" class="form-control" />
+        <span asp-validation-for="BorrowedAt" class="text-danger"></span>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="DueAt" class="form-label"></label>
+        <input asp-for="DueAt" type="date" class="form-control" />
+        <span asp-validation-for="DueAt" class="text-danger"></span>
+    </div>
+</div>
+

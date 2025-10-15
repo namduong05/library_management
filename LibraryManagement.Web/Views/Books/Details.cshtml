@@ -1,0 +1,78 @@
+@model LibraryManagement.Web.Models.Book
+@{
+    ViewData["Title"] = "Book Details";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="section-title mb-0"><i class="fa-solid fa-book-open"></i> @Model.Title</h1>
+    <div class="btn-group">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary"><i class="fa-solid fa-pen me-2"></i>Edit</a>
+        <a asp-action="Index" class="btn btn-outline-secondary"><i class="fa-solid fa-arrow-left me-2"></i>Back to List</a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-4">
+        @if (!string.IsNullOrWhiteSpace(Model.CoverUrl))
+        {
+            <img src="@Model.CoverUrl" alt="@Model.Title" class="img-fluid rounded-4 shadow-sm" />
+        }
+        else
+        {
+            <div class="bg-light border rounded-4 d-flex align-items-center justify-content-center" style="height:360px;">
+                <i class="fa-solid fa-image fa-3x text-muted"></i>
+            </div>
+        }
+    </div>
+    <div class="col-md-8">
+        <div class="row mb-3">
+            <div class="col-sm-6">
+                <h6 class="text-uppercase text-muted">Author</h6>
+                <p class="fw-semibold">@Model.Author</p>
+            </div>
+            <div class="col-sm-6">
+                <h6 class="text-uppercase text-muted">Category</h6>
+                <p class="fw-semibold">@Model.Category</p>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-sm-6">
+                <h6 class="text-uppercase text-muted">ISBN</h6>
+                <p class="fw-semibold">@Model.Isbn</p>
+            </div>
+            <div class="col-sm-6">
+                <h6 class="text-uppercase text-muted">Availability</h6>
+                <p><span class="badge bg-@(Model.AvailableCopies > 0 ? "success" : "secondary")">@Model.AvailableCopies / @Model.TotalCopies</span></p>
+            </div>
+        </div>
+        <div class="mb-4">
+            <h6 class="text-uppercase text-muted">Description</h6>
+            <p class="text-muted">@Model.Description</p>
+        </div>
+        <div>
+            <h6 class="text-uppercase text-muted">Loan History</h6>
+            @if (!Model.Loans.Any())
+            {
+                <p class="text-muted">No loans recorded for this book.</p>
+            }
+            else
+            {
+                <ul class="list-group list-group-flush">
+                    @foreach (var loan in Model.Loans.OrderByDescending(l => l.BorrowedAt).Take(5))
+                    {
+                        <li class="list-group-item px-0">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="fw-semibold">@loan.ApplicationUser?.FullName</div>
+                                    <small class="text-muted">Borrowed: @loan.BorrowedAt.ToShortDateString()</small>
+                                </div>
+                                <span class="badge badge-status @(loan.Status == LoanStatus.Returned ? "bg-success" : "bg-primary")">@loan.Status</span>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+    </div>
+</div>
+

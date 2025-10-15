@@ -1,0 +1,59 @@
+@model IEnumerable<LibraryManagement.Web.Models.ApplicationUser>
+@{
+    ViewData["Title"] = "Users";
+    var roleOptions = ViewBag.RoleOptions as List<SelectListItem> ?? new();
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="section-title mb-0"><i class="fa-solid fa-users"></i> Users</h1>
+    <a asp-action="Create" class="btn btn-primary"><i class="fa-solid fa-user-plus me-2"></i>New User</a>
+</div>
+
+<form class="row g-2 align-items-center mb-4" method="get">
+    <div class="col-md-4">
+        <select name="role" class="form-select form-select-lg" onchange="this.form.submit()">
+            <option value="">All Roles</option>
+            @foreach (var option in roleOptions)
+            {
+                <option value="@option.Value" selected="@(ViewBag.Role == option.Value ? "selected" : null)">@option.Text</option>
+            }
+        </select>
+    </div>
+</form>
+
+<div class="table-responsive">
+    <table class="table align-middle table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Role</th>
+                <th>Joined</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td class="fw-semibold">@user.FullName</td>
+                    <td>@user.Email</td>
+                    <td>@user.PhoneNumber</td>
+                    <td>
+                        <span class="badge bg-@(user.Role == UserRole.Librarian ? "primary" : "success")">@user.Role</span>
+                    </td>
+                    <td>@user.RegisteredAt.ToShortDateString()</td>
+                    <td class="text-end">
+                        <div class="btn-group">
+                            <a asp-action="Details" asp-route-id="@user.Id" class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-eye"></i></a>
+                            <a asp-action="Edit" asp-route-id="@user.Id" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-pen"></i></a>
+                            <a asp-action="Delete" asp-route-id="@user.Id" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

@@ -1,0 +1,31 @@
+@model LibraryManagement.Web.Models.Loan
+@{
+    ViewData["Title"] = "Delete Loan";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="section-title mb-0 text-danger"><i class="fa-solid fa-trash"></i> Delete Loan</h1>
+    <a asp-action="Index" class="btn btn-outline-secondary"><i class="fa-solid fa-arrow-left me-2"></i>Cancel</a>
+</div>
+
+<div class="alert alert-danger border-0 shadow-sm rounded-4">
+    <h5 class="alert-heading">Delete Loan Record?</h5>
+    <p>This will remove the loan record for <strong>@Model.Book?.Title</strong> borrowed by <strong>@Model.ApplicationUser?.FullName</strong>.</p>
+</div>
+
+<div class="border rounded-4 p-4 mb-4">
+    <dl class="row mb-0">
+        <dt class="col-sm-3">Borrowed</dt>
+        <dd class="col-sm-9">@Model.BorrowedAt.ToShortDateString()</dd>
+        <dt class="col-sm-3">Due</dt>
+        <dd class="col-sm-9">@Model.DueAt.ToShortDateString()</dd>
+        <dt class="col-sm-3">Status</dt>
+        <dd class="col-sm-9">@Model.Status</dd>
+    </dl>
+</div>
+
+<form asp-action="Delete">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger btn-lg"><i class="fa-solid fa-trash me-2"></i>Delete</button>
+</form>
+

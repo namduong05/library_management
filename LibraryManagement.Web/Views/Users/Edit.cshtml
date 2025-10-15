@@ -1,0 +1,24 @@
+@model LibraryManagement.Web.Models.ApplicationUser
+@{
+    ViewData["Title"] = "Edit User";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="section-title mb-0"><i class="fa-solid fa-user-pen"></i> Edit User</h1>
+    <a asp-action="Index" class="btn btn-outline-secondary"><i class="fa-solid fa-arrow-left me-2"></i>Back to List</a>
+</div>
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="Id" />
+    <div class="border rounded-4 p-4 mb-4">
+        <partial name="_UserForm" />
+    </div>
+    <div class="d-flex justify-content-end gap-3">
+        <button type="submit" class="btn btn-primary btn-lg"><i class="fa-solid fa-save me-2"></i>Update</button>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

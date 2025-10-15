@@ -1,0 +1,75 @@
+@model IEnumerable<LibraryManagement.Web.Models.Loan>
+@{
+    ViewData["Title"] = "Loans";
+    var statusOptions = ViewBag.StatusOptions as List<SelectListItem> ?? new();
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="section-title mb-0"><i class="fa-solid fa-handshake"></i> Loans</h1>
+    <a asp-action="Create" class="btn btn-primary"><i class="fa-solid fa-plus me-2"></i>New Loan</a>
+</div>
+
+<form class="row g-2 align-items-center mb-4" method="get">
+    <div class="col-md-4">
+        <select name="status" class="form-select form-select-lg" onchange="this.form.submit()">
+            <option value="">All Statuses</option>
+            @foreach (var option in statusOptions)
+            {
+                <option value="@option.Value" selected="@(ViewBag.Status == option.Value ? "selected" : null)">@option.Text</option>
+            }
+        </select>
+    </div>
+</form>
+
+<div class="table-responsive">
+    <table class="table align-middle table-hover">
+        <thead>
+            <tr>
+                <th>Book</th>
+                <th>Reader</th>
+                <th>Borrowed</th>
+                <th>Due</th>
+                <th>Returned</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var loan in Model)
+            {
+                var badgeClass = loan.Status switch
+                {
+                    LoanStatus.Borrowed => "bg-primary",
+                    LoanStatus.Returned => "bg-success",
+                    LoanStatus.Overdue => "bg-danger",
+                    _ => "bg-secondary"
+                };
+                <tr>
+                    <td>
+                        <div class="fw-semibold">@loan.Book?.Title</div>
+                        <small class="text-muted">@loan.Book?.Author</small>
+                    </td>
+                    <td>
+                        <div class="fw-semibold">@loan.ApplicationUser?.FullName</div>
+                        <small class="text-muted">@loan.ApplicationUser?.Email</small>
+                    </td>
+                    <td>@loan.BorrowedAt.ToShortDateString()</td>
+                    <td>@loan.DueAt.ToShortDateString()</td>
+                    <td>@loan.ReturnedAt?.ToShortDateString()</td>
+                    <td><span class="badge badge-status @badgeClass">@loan.Status</span></td>
+                    <td class="text-end">
+                        <div class="btn-group">
+                            <a asp-action="Details" asp-route-id="@loan.Id" class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-eye"></i></a>
+                            @if (loan.Status != LoanStatus.Returned)
+                            {
+                                <a asp-action="Return" asp-route-id="@loan.Id" class="btn btn-outline-success btn-sm"><i class="fa-solid fa-rotate-left"></i></a>
+                            }
+                            <a asp-action="Delete" asp-route-id="@loan.Id" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
